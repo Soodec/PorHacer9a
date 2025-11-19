@@ -5,6 +5,7 @@ import { IonInput, IonButton, IonSpinner } from '@ionic/react'
 import { useFormik } from 'formik'
 import { initialValues, validationschema } from './TaskForm.form'
 import { v4 as uuidv4 } from 'uuid'
+import { useTaks } from '../../../hooks'
 
 export function TaskForm(props:TaskFormTypes.Props) {
   const formik = useFormik({
@@ -18,10 +19,11 @@ export function TaskForm(props:TaskFormTypes.Props) {
           completd:false,
           create_at:new Date(),
         }
-        console.log(data)
+        createTask(data)
         onClose()
     }
   })
+  const {createTask} = useTaks()
   const  {onClose} = props
   return (
    <div className="task-form">

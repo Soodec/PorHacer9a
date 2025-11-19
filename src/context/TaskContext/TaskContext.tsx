@@ -3,6 +3,9 @@ import {TaskContextTypes} from './TaskContext.type'
 import { IonModal, IonContent } from '@ionic/react'
 import { TaskForm } from '../../components'
 import { taskModel } from '../../models'
+import { Task } from './api'
+
+const taskController = new Task()
 
 export const TaskContext = createContext<TaskContextTypes.Context>({
   totalTask:0,
@@ -21,7 +24,7 @@ export function TaskProvider(props:TaskContextTypes.Props) {
   const closeFormTask = ()=>modalRef.current?.dismiss()
 
   const createTask = (task:taskModel)=>{
-
+    taskController.create(task)
   }
 
   const valueContext: TaskContextTypes.Context ={

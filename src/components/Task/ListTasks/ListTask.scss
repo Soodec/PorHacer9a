@@ -1,0 +1,9 @@
+.list-task {
+    padding: 10px;
+    > h3{
+        padding-top: 20px;
+    }   
+    &__no-tasks{
+        text-align: center;
+    }
+}

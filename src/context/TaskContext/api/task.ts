@@ -14,4 +14,7 @@ export class Task {
         const parsed = JSON.parse(response)
         return Array.isArray(parsed) ? parsed : []
     }
+    changeAllTasks(tasks:taskModel[]){
+        localStorage.setItem(ENV.LOCAL_STORAGE.TASKS, JSON.stringify(tasks))
+    }
 }

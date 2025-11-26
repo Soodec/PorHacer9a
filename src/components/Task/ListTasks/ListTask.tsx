@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './ListTask.scss'
 import { useTaks } from '../../../hooks'
 import { map, size } from 'lodash'
+import { TaskItem } from '../TaskItem'
 
 export function ListTask() {
     const {tasks , CompletedTask} = useTaks()
@@ -19,9 +20,7 @@ export function ListTask() {
         }
 
         {
-          tasks.map((task) => (
-            <p key={task.id}>{task.description}</p>
-          ))
+          map(tasks,(task)=><TaskItem key={task.id} task={task} />)
         }
 
         {
@@ -29,9 +28,7 @@ export function ListTask() {
         }
 
         {
-          CompletedTask.map((task) => (
-            <p key={task.id}>{task.description}</p>
-          ))
+          CompletedTask.map((task) => <TaskItem key={task.id} task={task} />)
         }
       </div>
     </div>

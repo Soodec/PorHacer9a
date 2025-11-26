@@ -4,6 +4,7 @@ import { IonModal, IonContent } from '@ionic/react'
 import { TaskForm } from '../../components'
 import { taskModel } from '../../models'
 import { Task } from './api'
+import { size } from 'lodash'
 
 
 const taskController = new Task()
@@ -23,6 +24,8 @@ export function TaskProvider(props: TaskContextTypes.Props) {
   const modalRef = useRef<HTMLIonModalElement>(null)
   const openFormTask = () => modalRef.current?.present()
   const closeFormTask = () => modalRef.current?.dismiss()
+  const [totalTask, setTotalTask] = useState<number>(0)
+  const [totalTaskCompleted, setTotalTaskCompleted] = useState<number>(0)
   const [tasks, setTask] = useState<taskModel[]>([])
   const [CompletedTask, setCompletedTask] = useState<taskModel[]>([])
   useEffect(() => {
@@ -36,17 +39,34 @@ export function TaskProvider(props: TaskContextTypes.Props) {
 
   const obtainTask = () => {
     const response = taskController.obtain()
-    setTask(response)
-  }
+    response.sort(
+      (a,b)=> new Date(b.create_at).getTime()-new Date(a.create_at).getTime()
+    )
+    const taskTemp = response.filter((task)=>!task.completed) 
+    const taskCompletedTemp = response.filter((task)=>task.completed)
 
+    setTask(taskTemp)
+    setCompletedTask(taskCompletedTemp)
+    setTotalTask(size(response))
+    setTotalTaskCompleted(size(taskCompletedTemp))
+
+  }
+  const checkUncheckComplete = (id:string,check:boolean)=>{
+    const newTasks = [...tasks, ...CompletedTask]
+    newTasks.filter((task)=>{
+      if(task.id === id) task.completed = check
+    })
+    taskController.changeAllTasks(newTasks)
+    obtainTask()
+}
   const valueContext: TaskContextTypes.Context = {
-    totalTask: 25,
-    totalTaskCompleted: 9,
+    totalTask,
+    totalTaskCompleted,
     tasks,
     CompletedTask,
     openFormTask,
     createTask,
-    checkUncheckComplete: () => { }
+    checkUncheckComplete
   }
 
   return (
